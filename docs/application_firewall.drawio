@@ -1,8 +1,10 @@
 <mxfile host="65bd71144e">
     <diagram name="Seite-1" id="EA9TMJkJTi4udjV-6h98">
-        <mxGraphModel dx="1154" dy="415" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="962" dy="346" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
             <root>
-                <mxCell id="0"/>
+                <object label="" id="0">
+                    <mxCell/>
+                </object>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="hnyBAmQ7VmMvFvbnPF3J-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="hnyBAmQ7VmMvFvbnPF3J-1" target="hnyBAmQ7VmMvFvbnPF3J-6" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -30,7 +32,7 @@
                         <mxPoint x="110" y="180" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="hnyBAmQ7VmMvFvbnPF3J-2" value="Java&lt;br&gt;listen :25565&lt;div&gt;listen :25577&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="hnyBAmQ7VmMvFvbnPF3J-2" value="Java&lt;br&gt;listen :25565" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="40" y="100" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="hnyBAmQ7VmMvFvbnPF3J-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="hnyBAmQ7VmMvFvbnPF3J-6" target="hnyBAmQ7VmMvFvbnPF3J-8" edge="1">
