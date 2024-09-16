@@ -1,0 +1,91 @@
+*mangle
+# Creating Chains
+-N WHITELIST
+-N RATELIMIT
+-N SYN_FLOOD
+
+# Allow internal stuff
+-A PREROUTING -i lo -j RETURN
+
+# Other Interfaces that are private
+-A PREROUTING -i enp33s0f1 -j RETURN
+-A PREROUTING -i vlan10 -j RETURN
+# Edge Interfaces used by docker
+-A PREROUTING -i docker_gwbridge -j RETURN
+-A PREROUTING -i docker0 -j RETURN
+
+# Allow OVH Monitoring
+-A PREROUTING -p icmp -s 92.222.184.0/24 -j RETURN
+-A PREROUTING -p icmp -s 92.222.185.0/24 -j RETURN
+-A PREROUTING -p icmp -s 92.222.186.0/24 -j RETURN
+-A PREROUTING -p icmp -s 167.114.37.0/24 -j RETURN
+-A PREROUTING -p icmp -s 139.99.1.144/28 -j RETURN
+-A PREROUTING -p icmp -s 213.186.33.13 -j RETURN
+
+# Drop invalid packets
+-A PREROUTING -m conntrack --ctstate INVALID -j DROP
+
+# Drop TCP packets that are new and are not SYN
+-A PREROUTING -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j DROP
+
+# Block packets with bogus TCP flags
+-A PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP
+-A PREROUTING -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+-A PREROUTING -p tcp --tcp-flags FIN,RST FIN,RST -j DROP
+-A PREROUTING -p tcp --tcp-flags FIN,ACK FIN -j DROP
+-A PREROUTING -p tcp --tcp-flags ACK,URG URG -j DROP
+-A PREROUTING -p tcp --tcp-flags ACK,PSH PSH -j DROP
+-A PREROUTING -p tcp --tcp-flags ALL NONE -j DROP
+
+# Block spoofed packets (used for local an private networks)
+-A PREROUTING -s 224.0.0.0/3 -j DROP
+-A PREROUTING -s 169.254.0.0/16 -j DROP
+-A PREROUTING -s 172.16.0.0/12 -j DROP
+-A PREROUTING -s 192.0.2.0/24 -j DROP
+-A PREROUTING -s 192.168.0.0/16 -j DROP
+-A PREROUTING -s 10.0.0.0/8 -j DROP
+-A PREROUTING -s 0.0.0.0/8 -j DROP
+-A PREROUTING -s 240.0.0.0/5 -j DROP
+-A PREROUTING -s 127.0.0.0/8 ! -i lo -j DROP
+
+# Drop ICMP packets
+-A PREROUTING -p icmp -j DROP
+
+# Drop fragments in all chains
+-A PREROUTING -f -j DROP
+
+# Limit connections per source
+-A PREROUTING -j RATELIMIT 
+
+# Limit concurrent connections
+-A RATELIMIT -p tcp -m connlimit --connlimit-above 30 -j DROP
+
+# Limit RST packets
+-A RATELIMIT -p tcp --tcp-flags RST RST -m limit --limit 2/s --limit-burst 2 -j RETURN
+-A RATELIMIT -p tcp --tcp-flags RST RST -j DROP
+
+# Limit new TCP connections per second per source IP
+-A RATELIMIT -p tcp -m conntrack --ctstate NEW -m limit --limit 60/s --limit-burst 20 -j RETURN
+-A RATELIMIT -p tcp -m conntrack --ctstate NEW -j DROP
+
+# Just whitelist what you need
+-A PREROUTING -p tcp -j WHITELIST
+# SSH
+-A WHITELIST -p tcp -m tcp --dport 22 -j RETURN
+# Web
+-A WHITELIST -p tcp -m tcp --dport 80 -j RETURN
+-A WHITELIST -p tcp -m tcp --dport 443 -j RETURN
+# Minecraft Java Server
+-A WHITELIST -p tcp -m tcp --dport 25565 -j RETURN
+# Minecraft Bedrock Server
+-A WHITELIST -p udp -m udp --dport 19132 -j RETURN
+# Established connections
+-A WHITELIST -p tcp -m conntrack --ctstate RELATED,ESTABLISHED -j RETURN
+-A WHITELIST -p udp -m conntrack --ctstate RELATED,ESTABLISHED -j RETURN
+-A WHITELIST -j DROP
+
+# Drop SYN flood packets
+-A PREROUTING -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j SYN_FLOOD
+-A SYN_FLOOD -m limit --limit 10000/sec --limit-burst 10000 -j RETURN
+-A SYN_FLOOD -j DROP
+COMMIT
