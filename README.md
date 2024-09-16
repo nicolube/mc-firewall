@@ -8,6 +8,7 @@ This Project aims to protect Minecraft Servers from DDOS attacks.
   - [Features](#features)
   - [Host Firewall](#host-firewall)
   - [Application Firewall](#application-firewall)
+    - [Blacklisting](#blacklisting)
   - [State of the Project](#state-of-the-project)
   
 ## Features
@@ -58,6 +59,20 @@ If the limit is reached, connection should be mitigated to a honeypot for furthe
 See the [application_firewall.haproxy](application_firewall.conf) file for the configuration.
 
 > **Note:** The application firewall does not support bedrock edition yet.
+
+### Blacklisting
+
+The Application Firewall can be used to blacklist IPs.
+
+To blacklist an IP add the ip or ip range to the `/etc/haproxy/blacklist.lst` file.
+
+Or use the import-script to import the blacklist from various sources.
+
+```bash
+sudo bash blacklist_importer.sh
+```
+
+> **Note:** The blacklist file must be created before starting the haproxy service.
 
 ## State of the Project
 
