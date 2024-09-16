@@ -35,6 +35,7 @@ sudo iptables-restore host_firewall.iptables
 > **Imported:** This will only handle ipv4 traffic. You should also configure the ipv6 firewall if you have ipv6 enabled.
 
 ![Host Firewall Diagram](docs/host_firewall.png)
+
 See the [host_firewall.iptables](host_firewall.iptables) file for the rules.
 
 > This firewall is based on a snippet from 
@@ -50,8 +51,10 @@ It aims to protect the Minecraft Server from DDOS attacks by limiting the number
 Currently the limits are configured in a way that 2 players can play without any issues.
 
 If the limit is reached, connection should be mitigated to a honeypot for further analysis.
+> Here is a honeypot that look promising, but it needs haproxy support: [[Minecraft-Honeypot](https://github.com/LockBlock-dev/MinePot)]
 
 ![Application Firewall Diagram](docs/application_firewall.png)
+
 See the [application_firewall.haproxy](application_firewall.conf) file for the configuration.
 
 > **Note:** The application firewall does not support bedrock edition yet.
